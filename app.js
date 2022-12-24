@@ -36,14 +36,71 @@ const assignmentSchema = new mongoose.Schema({
 const Assignment = mongoose.model("Assignment",assignmentSchema);
 
 const ass1 = new Assignment({
-    firstName: "dhruv",
-    lastName : "patel",
-    email : "abc@gmail.com",
+    firstName: "dhruv1",
+    lastName : "patel1",
+    email : "abc@gmail1.com",
     password : "virus",
-    role : 'Admin',
+    role : 'Amin',
     
 });
-ass1.save();
+// ass1.save();
+
+app.get("/",function(req,res){
+  res.render("register");
+});
+
+app.post("/",function(req,res){
+  
+  if(req.body.password1 === req.body.password2){
+    firstname = req.body.Fname;
+  lname = req.body.Lname;
+  email = req.body.Email;
+    pass= req.body.password1;
+    role= req.body.role;
+  }
+  else{
+    res.send("Password Not matching")
+  }
+  
+
+  const ass= new Assignment({
+    firstName : firstname,
+    lastName : lname,
+    email : email,
+    password : pass,
+    role : role,
+
+  });
+  ass.save();
+  res.redirect("/");
+
+});
+
+app.get("/login",function(req,res){
+  res.render("login");
+});
+
+app.post("/login",function(req,res){
+  email = req.body.Email;
+  password = req.body.password;
+  role= req.body.role;
+
+  Assignment.findOne({email : email, password : password, role: role}, function(err,foundPerson){
+    if(err){
+      res.send(err);
+    }
+    else{
+      if (foundPerson === null){
+        res.send("Person Not Found");
+      }
+      else{
+        console.log(foundPerson);
+        res.render("home",{foundPerson: foundPerson});
+      }
+      
+    }
+  })
+})
 
 
 

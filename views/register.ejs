@@ -1,0 +1,27 @@
+<%- include('header'); -%>
+
+<div>
+    If Already have a Account?  <a href="/login">Login</a>
+</div>
+<h1>Register</h1>
+
+<div class="container">
+    <form action="/" method="post">
+    First Name<input type="text" name="Fname" placeholder="Enter your first Name" required> <br> <br>
+    Last Name<input type="text" name="Lname" placeholder="Enter your last Name" required> <br> <br>
+    email<input type="email" name="Email" placeholder="Enter your email" required> <br> <br>
+    Password<input type="password" name="password1" placeholder="Enter your password" required> <br> <br>
+    Confirm Password<input type="password" name="password2" placeholder="confirm password" required> <br> <br>
+    Role:
+    <div>
+        Admin <input type="radio" name="role" id="Admin" value="Admin">
+        User  <input type="radio" name="role" id="User" value="User">
+    </div> <br>
+    Department <input type="text" name="Dept" placeholder="Your Department"> <br>
+    <button type="submit" class="btn btn-primary" name="button">Publish</button>
+</form>
+</div>
+
+
+
+<%- include('footer'); -%>

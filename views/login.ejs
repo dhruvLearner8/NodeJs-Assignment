@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Login</title>
+</head>
+<body>
+    <div>
+      <h3> Dont have a Account please <a href="/">Register</a> </h3>
+    </div>
+
+    <div class="container">
+        <form action="/login" method="post">
+            Email : <input type="email" name="Email" placeholder="Enter your email" required> <br> <br>
+            Password : <input type="password" name="password" placeholder="Enter your password" required> <br> <br>
+            Select Role :
+            <div>
+                Admin <input type="radio" name="role" id="Admin" value="Admin">
+                User  <input type="radio" name="role" id="User" value="User">
+            </div> <br>
+            <button type="submit" class="btn btn-primary" name="button">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
