@@ -1,0 +1,28 @@
+<%- include('header'); -%>
+<div class="section">
+    <h5>Current details</h5>
+    <div class="container">
+        
+          <h3>  Your first name : <%= foundPerson.firstName %> </h3> 
+          <h3>  Your Last name : <%= foundPerson.lastName %> </h3> 
+          <h3>  Your email : <%= foundPerson.email %> </h3> 
+          <h3>  Your Role : <%= foundPerson.role %> </h3> 
+          <h3>  Your Department : <%= foundPerson.department %> </h3>
+    
+    </div>
+    <div class="container">
+        <h5>Update Details</h5>
+        <form action="/updateUser" method="post">
+        First Name :  <input type="text" name="fname" placeholder="Enter name"> <br>
+        Last Name:   <input type="text" name="lname" placeholder="Enter last name"> <br>
+        Email :    <input type="text" name="email" placeholder="Enter Email"> <br>
+        <input type="hidden" id="Id" name="Id" value= <%= foundPerson._id %>>
+        <input type="hidden" id="role" name="role" value= <%= foundPerson.role %>>
+            <button type="submit" class="btn btn-primary" name="button">Update</button>
+        </form>
+    </div>
+</div>
+
+
+
+<%- include('footer'); -%>

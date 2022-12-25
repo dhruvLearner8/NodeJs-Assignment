@@ -71,6 +71,7 @@ app.post("/",function(req,res){
   email = req.body.Email;
     pass= req.body.password1;
     role= req.body.role;
+    dept = req.body.Dept;
   }
   else{
     res.send("Password Not matching")
@@ -83,6 +84,7 @@ app.post("/",function(req,res){
     email : email,
     password : pass,
     role : role,
+    department : dept
 
   });
   ass.save();
@@ -138,6 +140,8 @@ app.post("/addUser",function(req,res){
   email = req.body.Email;
     pass= req.body.password1;
     role= req.body.role;
+    dept = req.body.Dept;
+
   }
   else{
     res.send("Password Not matching")
@@ -150,6 +154,7 @@ app.post("/addUser",function(req,res){
     email : email,
     password : pass,
     role : role,
+    department:dept,
 
   });
   ass.save();
@@ -180,7 +185,7 @@ app.post("/findUser",function(req,res){
   }
 
   if(field === 'lname'){
-    Assignment.find({},{lastName:1,_id:0}, function (err, docs1) {
+    Assignment.find({role:'User'},{lastName:1,_id:0}, function (err, docs1) {
       if(err){
         res.send(err);
       }
@@ -191,7 +196,7 @@ app.post("/findUser",function(req,res){
   }
 
   if(field === 'all'){
-    Assignment.find({}, function (err, docs1) {
+    Assignment.find({role:'User'}, function (err, docs1) {
       if(err){
         res.send(err);
       }
@@ -239,9 +244,40 @@ if(role==='Admin'){
     });
   }
 }
+});
 
+app.get("/updateUser/:id",function(req,res){
+  Assignment.findOne({_id:req.params.id},function(err,foundPerson){
+    if(err){
+      res.send(err);
+    }
+    else{
+      res.render("updatePage",foundPerson);
+    }
+  })
+  
+})
 
+app.post("/updateUser",function(req,res){
+  console.log(req.body.Id);
+  Assignment.findOneAndUpdate({_id : req.body.Id},{
+    firstName : req.body.fname,
+    lastName : req.body.lname,
+    email : req.body.email,
+    role : req.body.role,
+    updatedAt : new Date(),
 
+  },
+  {overwrite:true},
+  function(err){
+    if(err){
+      res.send(err);
+    }
+    else{
+      res.send("Updated Succesfully");
+    }
+  })
+  
 })
 
 

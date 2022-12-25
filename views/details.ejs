@@ -26,18 +26,22 @@
               <th>Last name    </th>
               <th>Email        </th>
               <!-- <th>Department</th> -->
+              <th>Update</th>
             </tr>
         <% for(var i=0; i<docs1.length ; i++) { %>
         
             <tr>
-                <td><%= docs1[i].firstName %></td>
-                <td><%= docs1[i].lastName %></td>
-                <td><%= docs1[i].email %></td>
-                <!-- <td><%= docs1[i].department %></td> -->
+              <h4>  <td><%= docs1[i].firstName %></td></h4>
+               <h4> <td><%= docs1[i].lastName %></td> </h4>
+             <h4>   <td><%= docs1[i].email %></td> </h4>
+                 <!-- <td><%= docs1[i].department %></td>  -->
+                 <td><a href="/updateUser/<%= docs1[i]._id %>">Update</a> </td>
+                 <!-- <h4> <td><a href="/updateUser" onclick="location.href=this.href+docs[i]._id;return false;"> Update</a></td></h4> -->
               </tr>
             
         <% }  %>
         <% } %>
+        <script src=""></script>
 
 
 <%- include('footer'); -%>
