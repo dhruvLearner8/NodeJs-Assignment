@@ -1,0 +1,23 @@
+<%- include('header'); -%>
+
+<div class="section">
+    <form action="/findUser" method="post">
+        <h2>Please Select fields</h2>
+        <fieldset>
+            
+            <input type="radio" id="fname" name="name" value="fname">
+<label for="name"> Find all first name</label><br>
+<input type="radio" id="lname" name="name" value="lname">
+<label for="lname"> Find all last names</label><br>
+<input type="radio" id="all" name="name" value="all">
+<label for="all"> Find all Details</label><br>
+        </fieldset>
+        <br>
+        <button type="submit" class="btn btn-primary" name="button">Submit</button>
+    </form>
+</div>
+
+
+
+
+<%- include('footer'); -%>

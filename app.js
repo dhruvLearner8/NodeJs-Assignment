@@ -154,8 +154,95 @@ app.post("/addUser",function(req,res){
   });
   ass.save();
   res.redirect("/home");
+});
+
+app.get("/findUser",function(req,res){
+  res.render("findUser");
 })
 
+app.post("/findUser",function(req,res){
+  foundPerson = req.session.user;
+  role=foundPerson.role;
+  
+  if(role==='User'){
+
+  field = req.body.name;
+  
+  if(field === 'fname'){
+    Assignment.find({role:'User'},{firstName:1,_id:0}, function (err, docs1) {
+      if(err){
+        res.send(err);
+      }
+      else{
+        res.render("details",{field : field, docs1 : docs1});
+      }
+    });
+  }
+
+  if(field === 'lname'){
+    Assignment.find({},{lastName:1,_id:0}, function (err, docs1) {
+      if(err){
+        res.send(err);
+      }
+      else{
+        res.render("details",{field : field, docs1 : docs1});
+      }
+    });
+  }
+
+  if(field === 'all'){
+    Assignment.find({}, function (err, docs1) {
+      if(err){
+        res.send(err);
+      }
+      else{
+        res.render("details",{field : field, docs1 : docs1});
+      }
+    });
+  }
+}
+
+if(role==='Admin'){
+
+  field = req.body.name;
+  
+  if(field === 'fname'){
+    Assignment.find({},{firstName:1,_id:0}, function (err, docs1) {
+      if(err){
+        res.send(err);
+      }
+      else{
+        res.render("details",{field : field, docs1 : docs1});
+      }
+    });
+  }
+
+  if(field === 'lname'){
+    Assignment.find({},{lastName:1,_id:0}, function (err, docs1) {
+      if(err){
+        res.send(err);
+      }
+      else{
+        res.render("details",{field : field, docs1 : docs1});
+      }
+    });
+  }
+
+  if(field === 'all'){
+    Assignment.find({}, function (err, docs1) {
+      if(err){
+        res.send(err);
+      }
+      else{
+        res.render("details",{field : field, docs1 : docs1});
+      }
+    });
+  }
+}
+
+
+
+})
 
 
 

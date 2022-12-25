@@ -1,0 +1,43 @@
+<%- include('header'); -%>
+
+
+<% if (field === 'fname') { %>
+    <h1>First Name List</h1>
+    <% for(var i=0; i<docs1.length ; i++) { %>
+
+       <h3> <li> <%= docs1[i].firstName %> </li> </h3>
+    <% }  %>
+    <% } %>
+
+
+<% if (field === 'lname') { %>
+    <h1>Last Name List</h1>
+    <% for(var i=0; i<docs1.length ; i++) { %>
+    
+        <h3> <li> <%= docs1[i].lastName %> </li> </h3>
+    <% }  %>
+    <% } %>
+
+    <% if (field === 'all') { %>
+        <h1>All details</h1>
+        <table>
+            <tr>
+              <th>First Name   </th>
+              <th>Last name    </th>
+              <th>Email        </th>
+              <!-- <th>Department</th> -->
+            </tr>
+        <% for(var i=0; i<docs1.length ; i++) { %>
+        
+            <tr>
+                <td><%= docs1[i].firstName %></td>
+                <td><%= docs1[i].lastName %></td>
+                <td><%= docs1[i].email %></td>
+                <!-- <td><%= docs1[i].department %></td> -->
+              </tr>
+            
+        <% }  %>
+        <% } %>
+
+
+<%- include('footer'); -%>
