@@ -3,16 +3,30 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 var _ = require("loadsh");
 const mongoose = require("mongoose");
-const encrypt = require("mongoose-encryption")
+const encrypt = require("mongoose-encryption");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const MongoStore = require('connect-mongo')
+
+
 
 
 
 const app = express();
+app.use(cookieParser());
+app.use(session({
+  resave:true,
+  saveUninitialized: true,
+  secret: "secret",
+  
+}));
+
 mongoose.connect("mongodb://localhost:27017/AssignmentDB",{useNewUrlParser:true});
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
+
 
 const secret = "thisismysecretkeyforencryption.";
 
@@ -94,12 +108,52 @@ app.post("/login",function(req,res){
         res.send("Person Not Found");
       }
       else{
-        console.log(foundPerson);
-        res.render("home",{foundPerson: foundPerson});
+        //console.log(foundPerson);
+        req.session.user = foundPerson;
+        
+        res.redirect("/home");
       }
       
     }
   })
+})
+
+app.get("/home",function(req,res){
+  foundPerson = req.session.user;
+  res.render("home",{foundPerson : foundPerson})
+})
+
+app.get("/addUser",function(req,res){
+  foundPerson = req.session.user;
+  role=foundPerson.role;
+  
+  res.render("addUser",{role : role});
+
+});
+
+app.post("/addUser",function(req,res){
+  if(req.body.password1 === req.body.password2){
+    firstname = req.body.Fname;
+  lname = req.body.Lname;
+  email = req.body.Email;
+    pass= req.body.password1;
+    role= req.body.role;
+  }
+  else{
+    res.send("Password Not matching")
+  }
+  
+
+  const ass= new Assignment({
+    firstName : firstname,
+    lastName : lname,
+    email : email,
+    password : pass,
+    role : role,
+
+  });
+  ass.save();
+  res.redirect("/home");
 })
 
 
