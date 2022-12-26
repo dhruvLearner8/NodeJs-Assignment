@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
@@ -7,12 +8,13 @@ const encrypt = require("mongoose-encryption");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const MongoStore = require('connect-mongo')
+const bcrypt = require("bcrypt");
 
-
-
+const jwt = require("jsonwebtoken");
 
 
 const app = express();
+app.use(express.json());
 app.use(cookieParser());
 app.use(session({
   resave:true,
@@ -63,13 +65,17 @@ app.get("/",function(req,res){
   res.render("register");
 });
 
-app.post("/",function(req,res){
+app.post("/", async function(req,res){
   
   if(req.body.password1 === req.body.password2){
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(req.body.password1,salt);
+    console.log(hashedPassword);
+
     firstname = req.body.Fname;
   lname = req.body.Lname;
   email = req.body.Email;
-    pass= req.body.password1;
+    password = hashedPassword;
     role= req.body.role;
     dept = req.body.Dept;
   }
@@ -82,7 +88,7 @@ app.post("/",function(req,res){
     firstName : firstname,
     lastName : lname,
     email : email,
-    password : pass,
+    password : password,
     role : role,
     department : dept
 
@@ -100,8 +106,8 @@ app.post("/login",function(req,res){
   email = req.body.Email;
   password = req.body.password;
   role= req.body.role;
-
-  Assignment.findOne({email : email, password : password, role: role}, function(err,foundPerson){
+  
+  Assignment.findOne({email : email,  role: role}, function(err,foundPerson){
     if(err){
       res.send(err);
     }
@@ -110,18 +116,27 @@ app.post("/login",function(req,res){
         res.send("Person Not Found");
       }
       else{
-        //console.log(foundPerson);
-        req.session.user = foundPerson;
+        if(bcrypt.compare(password,foundPerson.password))
+        {
+          const accessToken = jwt.sign(foundPerson.toObject(), process.env.ACCESS_TOKEN_SECRET);
+         // req.session.user = foundPerson;
+         console.log(accessToken);
+         res.json({accessToken: accessToken});
+        //  return res.redirect("/home");
+        }
+        else{
+          res.send("password not matching");
+        }
         
-        res.redirect("/home");
       }
       
     }
   })
 })
 
-app.get("/home",function(req,res){
-  foundPerson = req.session.user;
+app.get("/home", authenticateToken, function(req,res){
+  foundPerson = req.user;
+  console.log(foundPerson);
   res.render("home",{foundPerson : foundPerson})
 })
 
@@ -280,6 +295,24 @@ app.post("/updateUser",function(req,res){
   
 })
 
+
+function authenticateToken(req,res,next){
+  const authHeader = req.headers.authorization;
+  console.log(authHeader);
+  
+  const token = authHeader && authHeader.split(' ')[1]
+  console.log(token);
+  if(token == null) return res.send("you dont have access");
+
+  jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,(err,user)=>{
+    if(err){
+      return res.send("Token not valid");
+    }
+    req.user=user;
+    next();
+  })
+
+}
 
 
 app.listen(3000 ,function(){
